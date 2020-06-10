@@ -1,0 +1,77 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "id": "6094c123-6569-4958-96c7-7ef28e1f2108",
+            "lastModifiedDate": 0,
+            "xindex": 1,
+            "yindex": 0,
+            "zindex": 1
+        }
+    ],
+    "required": [
+        "id",
+        "lastModifiedDate",
+        "xindex",
+        "yindex",
+        "zindex"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "string",
+            "title": "The id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "6094c123-6569-4958-96c7-7ef28e1f2108"
+            ]
+        },
+        "lastModifiedDate": {
+            "$id": "#/properties/lastModifiedDate",
+            "type": "string",
+            "title": "The lastModifiedDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        },
+        "xindex": {
+            "$id": "#/properties/xindex",
+            "type": "integer",
+            "title": "The xindex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "yindex": {
+            "$id": "#/properties/yindex",
+            "type": "integer",
+            "title": "The yindex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                0
+            ]
+        },
+        "zindex": {
+            "$id": "#/properties/zindex",
+            "type": "integer",
+            "title": "The zindex schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        }
+    }
+}
