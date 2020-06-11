@@ -44,13 +44,12 @@ public class WidgetInMemoryRepository implements WidgetRepository<Widget, String
         if (startIndex >= zKeyIndex.size()) {
             return Collections.EMPTY_LIST;
         }
-        var finishIndex = startIndex + perPage;
-        finishIndex = Math.min(finishIndex, zKeyIndex.size());
 
         readLock.lock();
         try {
-            return new ArrayList<>(zKeyIndex.values())
-                    .subList(startIndex, finishIndex).stream()
+            return zKeyIndex.values().stream()
+                    .skip(startIndex)
+                    .limit(perPage)
                     .map(mainStorage::get)
                     .collect(Collectors.toList());
         } finally {
