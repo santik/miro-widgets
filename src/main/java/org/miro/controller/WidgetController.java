@@ -36,9 +36,9 @@ public class WidgetController {
     @ApiOperation("Creates new widget")
     @ResponseBody
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Success", response = WidgetPresentation.class)})
-    public ResponseEntity<WidgetPresentation> create(@RequestBody WidgetDescription coordinates) {
+    public ResponseEntity<WidgetPresentation> create(@RequestBody WidgetDescription description ) {
         try {
-            var widget = widgetService.createWidget(coordinates);
+            var widget = widgetService.createWidget(description );
             return new ResponseEntity<>(widget, HttpStatus.CREATED);
         } catch (InvalidObjectException e) {
             return ResponseEntity.badRequest().build();
@@ -49,10 +49,10 @@ public class WidgetController {
     @ApiOperation("Updates widget by id")
     @ResponseBody
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = WidgetPresentation.class)})
-    public ResponseEntity<WidgetPresentation> update(@PathVariable("id") String id, @RequestBody WidgetDescription coordinates) {
+    public ResponseEntity<WidgetPresentation> update(@PathVariable("id") String id, @RequestBody WidgetDescription description ) {
         WidgetPresentation updatedWidget;
         try {
-            updatedWidget = widgetService.updateWidget(id, coordinates);
+            updatedWidget = widgetService.updateWidget(id, description );
         } catch (WidgetNotFound widgetNotFound) {
             return ResponseEntity.notFound().build();
         }

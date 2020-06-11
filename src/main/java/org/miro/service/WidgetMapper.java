@@ -13,6 +13,8 @@ public class WidgetMapper {
                 .withXindex(widget.getX())
                 .withYindex(widget.getY())
                 .withZindex(widget.getZ())
+                .withWidth(widget.getWidth())
+                .withHeight(widget.getHeight())
                 .withLastModifiedDate(widget.getLastModifiedDate().toString());
     }
 

@@ -58,6 +58,8 @@ public class WidgetE2ETest {
         assertEquals(coordinates.getXindex(), actualPresentation.getXindex());
         assertEquals(coordinates.getYindex(), actualPresentation.getYindex());
         assertEquals(coordinates.getZindex(), actualPresentation.getZindex());
+        assertEquals(coordinates.getWidth(), actualPresentation.getWidth());
+        assertEquals(coordinates.getHeight(), actualPresentation.getHeight());
     }
 
     @Test
@@ -107,6 +109,8 @@ public class WidgetE2ETest {
         assertEquals(newCoordinates.getXindex(), response.getBody().getXindex());
         assertEquals(newCoordinates.getYindex(), response.getBody().getYindex());
         assertEquals(newCoordinates.getZindex(), response.getBody().getZindex());
+        assertEquals(newCoordinates.getWidth(), response.getBody().getWidth());
+        assertEquals(newCoordinates.getHeight(), response.getBody().getHeight());
     }
 
     @Test
@@ -178,6 +182,8 @@ public class WidgetE2ETest {
         assertEquals(coordinates.getXindex(), response.getBody().getXindex());
         assertEquals(coordinates.getYindex(), response.getBody().getYindex());
         assertEquals(coordinates.getZindex(), response.getBody().getZindex());
+        assertEquals(coordinates.getWidth(), response.getBody().getWidth());
+        assertEquals(coordinates.getHeight(), response.getBody().getHeight());
     }
 
     @Test
@@ -224,6 +230,8 @@ public class WidgetE2ETest {
             WidgetDescription widgetDescription = coordinatesMap.get(item.getId());
             assertEquals(item.getXindex(), widgetDescription.getXindex());
             assertEquals(item.getYindex(), widgetDescription.getYindex());
+            assertEquals(item.getWidth(), widgetDescription.getWidth());
+            assertEquals(item.getHeight(), widgetDescription.getHeight());
             assertTrue(item.getZindex() >= widgetDescription.getZindex());
         });
     }

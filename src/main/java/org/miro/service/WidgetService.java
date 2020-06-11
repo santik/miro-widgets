@@ -32,8 +32,8 @@ public class WidgetService {
     }
 
     @Transactional
-    public WidgetPresentation updateWidget(String id, WidgetDescription coordinates) throws WidgetNotFound {
-        var widget = getWidgetToUpdate(id, coordinates);
+    public WidgetPresentation updateWidget(String id, WidgetDescription description ) throws WidgetNotFound {
+        var widget = getWidgetToUpdate(id, description );
         return mapper.getWidgetPresentation(
                 repository.createOrUpdate(widget)
         );
@@ -66,7 +66,7 @@ public class WidgetService {
                 .collect(Collectors.toList());
     }
 
-    private Widget getWidgetToUpdate(String id, WidgetDescription coordinates) throws WidgetNotFound {
+    private Widget getWidgetToUpdate(String id, WidgetDescription description ) throws WidgetNotFound {
 
         var widgetOptional = repository.findById(id);
         if (widgetOptional.isEmpty()) {
@@ -75,9 +75,11 @@ public class WidgetService {
 
         var widget = widgetOptional.get().clone();
 
-        Optional.ofNullable(coordinates.getXindex()).ifPresent(widget::setX);
-        Optional.ofNullable(coordinates.getYindex()).ifPresent(widget::setY);
-        Optional.ofNullable(coordinates.getZindex()).ifPresent(widget::setZ);
+        Optional.ofNullable(description .getXindex()).ifPresent(widget::setX);
+        Optional.ofNullable(description .getYindex()).ifPresent(widget::setY);
+        Optional.ofNullable(description .getZindex()).ifPresent(widget::setZ);
+        Optional.ofNullable(description .getWidth()).ifPresent(widget::setWidth);
+        Optional.ofNullable(description .getHeight()).ifPresent(widget::setHeight);
 
         return widget;
     }

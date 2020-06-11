@@ -56,6 +56,19 @@ public class WidgetControllerTest {
     }
 
     @Test
+    public void create_withInCorrectDimensions_shouldReturnBadRequest() throws InvalidObjectException {
+        //arrange
+        var coordinates = new WidgetDescription(1, 1, 1, 0, 1);
+        when(widgetService.createWidget(coordinates)).thenThrow(InvalidObjectException.class);
+
+        //act
+        ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
+
+        //assert
+        assertEquals(BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
     public void create_withInCorrectCoordinates_shouldReturnBadRequest() throws InvalidObjectException {
         //arrange
         var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
