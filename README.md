@@ -29,6 +29,6 @@ Url is http://localhost:8080/api/swagger-ui.html (when running the service)
 
 ###Complications
 
-- configurable datastore - done
+- configurable datastore - DONE
+- pagination - DONE
 - rate limiting probably can be done with https://github.com/MarcGiffing/bucket4j-spring-boot-starter
-- pagination. Slice a storage inside inmemory repository and use `Pageable` in JPA
