@@ -1,4 +1,4 @@
-package org.miro.repository.database;
+package org.miro.repository.jpa;
 
 import org.miro.model.Widget;
 import org.springframework.data.repository.CrudRepository;

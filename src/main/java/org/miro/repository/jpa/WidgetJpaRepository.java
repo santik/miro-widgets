@@ -1,4 +1,4 @@
-package org.miro.repository.database;
+package org.miro.repository.jpa;
 
 import lombok.RequiredArgsConstructor;
 import org.miro.model.Widget;
