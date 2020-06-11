@@ -27,7 +27,7 @@ class WidgetInMemoryRepositoryTest {
         repository.createOrUpdate(widget);
 
         //act
-        List<Widget> widgets = repository.findAll();
+        List<Widget> widgets = repository.findAll(1, 100);
 
         //assert
         assertSame(widget, widgets.get(0));
@@ -44,11 +44,64 @@ class WidgetInMemoryRepositoryTest {
         });
 
         //act
-        List<Widget> widgets = repository.findAll();
+        List<Widget> widgets = repository.findAll(1, 100);
 
         //assert
         assertEquals(endExclusive, widgets.size());
         IntStream.range(1, widgets.size()).forEach(i -> assertTrue(widgets.get(i).getZ() > widgets.get(i - 1).getZ()));
+    }
+
+    @Test
+    void findAllPaging_shouldReturnPages() {
+        //arrange
+        var repository = new WidgetInMemoryRepository();
+        int endExclusive = 100;
+        IntStream.range(0, endExclusive).forEach(i -> {
+            var widget = Widget.builder().id("id" + i).x(1).y(1).z(1).build();
+            repository.createOrUpdate(widget);
+        });
+
+        //act
+        List<Widget> widgetsPage1 = repository.findAll(1, 50);
+        List<Widget> widgetsPage2 = repository.findAll(2, 50);
+
+        //assert
+        assertEquals(50, widgetsPage1.size());
+        assertEquals(50, widgetsPage2.size());
+    }
+
+    @Test
+    void findAllPaging_withTooBigPageNumber_shouldReturnEmpty() {
+        //arrange
+        var repository = new WidgetInMemoryRepository();
+        int endExclusive = 100;
+        IntStream.range(0, endExclusive).forEach(i -> {
+            var widget = Widget.builder().id("id" + i).x(1).y(1).z(1).build();
+            repository.createOrUpdate(widget);
+        });
+
+        //act
+        List<Widget> widgets = repository.findAll(1000, 50);
+
+        //assert
+        assertTrue(widgets.isEmpty());
+    }
+
+    @Test
+    void findAllPaging_withTooBigPerPage_shouldReturnCorrect() {
+        //arrange
+        var repository = new WidgetInMemoryRepository();
+        int endExclusive = 100;
+        IntStream.range(0, endExclusive).forEach(i -> {
+            var widget = Widget.builder().id("id" + i).x(1).y(1).z(1).build();
+            repository.createOrUpdate(widget);
+        });
+
+        //act
+        List<Widget> widgets = repository.findAll(1, 50000);
+
+        //assert
+        assertEquals(endExclusive, widgets.size());
     }
 
     @Test
@@ -105,7 +158,7 @@ class WidgetInMemoryRepositoryTest {
         Widget actual = repository.createOrUpdate(widget);
 
         //assert
-        List<Widget> widgets = repository.findAll();
+        List<Widget> widgets = repository.findAll(1, 100);
         assertSame(widget, widgets.get(0));
         assertSame(widget, actual);
     }
@@ -137,7 +190,7 @@ class WidgetInMemoryRepositoryTest {
         Widget actual = repository.createOrUpdate(widget);
 
         //assert
-        List<Widget> widgets = repository.findAll();
+        List<Widget> widgets = repository.findAll(1, 100);
         assertEquals(2, widgets.size());
         assertTrue(actual.getZ() > topZ);
     }
@@ -156,7 +209,7 @@ class WidgetInMemoryRepositoryTest {
         Widget actual = repository.createOrUpdate(widget);
 
         //assert
-        List<Widget> widgets = repository.findAll();
+        List<Widget> widgets = repository.findAll(1, 100);
         assertEquals(2, widgets.size());
         assertEquals(actual.getZ().intValue(), existing);
         assertTrue(repository.findById(firstId).get().getZ() > existing);
@@ -210,6 +263,6 @@ class WidgetInMemoryRepositoryTest {
         var combinedFuture = CompletableFuture.allOf(futures);
         combinedFuture.get();
 
-        assertEquals(numberOfFutures * perFuture, repository.findAll().size());
+        assertEquals(numberOfFutures * perFuture, repository.findAll(1, numberOfFutures * perFuture).size());
     }
 }

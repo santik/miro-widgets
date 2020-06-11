@@ -201,7 +201,7 @@ public class WidgetE2ETest {
     @Test
     public void getAll_shouldReturnOk() {
         //arrange
-        ResponseEntity<WidgetPresentation[]> response = restTemplate.exchange(getEndpointPath() + "/all", HttpMethod.GET, null, WidgetPresentation[].class);
+        ResponseEntity<WidgetPresentation[]> response = restTemplate.exchange(getEndpointPath() + "/all?page=1&perPage=200", HttpMethod.GET, null, WidgetPresentation[].class);
         Stream.of(response.getBody()).forEach(widget -> {
             restTemplate.delete(getEndpointPath() + "/" + widget.getId());
         });
@@ -221,19 +221,33 @@ public class WidgetE2ETest {
         });
 
         //act
-        ResponseEntity<WidgetPresentation[]> getAll = restTemplate.exchange(getEndpointPath() + "/all", HttpMethod.GET, null, WidgetPresentation[].class);
+        var perPage = endExclusive/2;
+        ResponseEntity<WidgetPresentation[]> getAllFirstPage = restTemplate.exchange(getEndpointPath() + "/all?page=1&perPage="+perPage, HttpMethod.GET, null, WidgetPresentation[].class);
+        ResponseEntity<WidgetPresentation[]> getAllSecondPage = restTemplate.exchange(getEndpointPath() + "/all?page=2&perPage="+perPage, HttpMethod.GET, null, WidgetPresentation[].class);
 
         //assert
         assertEquals(OK, response.getStatusCode());
-        assertEquals(coordinatesMap.size(), getAll.getBody().length);
-        Stream.of(getAll.getBody()).forEach(item -> {
-            WidgetDescription widgetDescription = coordinatesMap.get(item.getId());
-            assertEquals(item.getXindex(), widgetDescription.getXindex());
-            assertEquals(item.getYindex(), widgetDescription.getYindex());
-            assertEquals(item.getWidth(), widgetDescription.getWidth());
-            assertEquals(item.getHeight(), widgetDescription.getHeight());
-            assertTrue(item.getZindex() >= widgetDescription.getZindex());
+        assertEquals(coordinatesMap.size(), getAllFirstPage.getBody().length + getAllSecondPage.getBody().length);
+
+        Stream.of(getAllFirstPage.getBody()).forEach(item -> {
+            verifyRetrievedItems(coordinatesMap, item);
         });
+
+        Stream.of(getAllSecondPage.getBody()).forEach(item -> {
+            verifyRetrievedItems(coordinatesMap, item);
+        });
+
+        assertTrue(coordinatesMap.isEmpty());
+    }
+
+    private void verifyRetrievedItems(Map<String, WidgetDescription> coordinatesMap, WidgetPresentation item) {
+        WidgetDescription widgetDescription = coordinatesMap.get(item.getId());
+        assertEquals(item.getXindex(), widgetDescription.getXindex());
+        assertEquals(item.getYindex(), widgetDescription.getYindex());
+        assertEquals(item.getWidth(), widgetDescription.getWidth());
+        assertEquals(item.getHeight(), widgetDescription.getHeight());
+        assertTrue(item.getZindex() >= widgetDescription.getZindex());
+        coordinatesMap.remove(item.getId());
     }
 
     private String getEndpointPath() {

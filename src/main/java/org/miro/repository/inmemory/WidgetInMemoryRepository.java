@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,10 +39,18 @@ public class WidgetInMemoryRepository implements WidgetRepository<Widget, String
     }
 
     @Override
-    public List<Widget> findAll() {
+    public List<Widget> findAll(int page, int perPage) {
+        var startIndex = (page - 1) * perPage;
+        if (startIndex >= zKeyIndex.size()) {
+            return Collections.EMPTY_LIST;
+        }
+        var finishIndex = startIndex + perPage;
+        finishIndex = Math.min(finishIndex, zKeyIndex.size());
+
         readLock.lock();
         try {
-           return zKeyIndex.values().stream()
+            return new ArrayList<>(zKeyIndex.values())
+                    .subList(startIndex, finishIndex).stream()
                     .map(mainStorage::get)
                     .collect(Collectors.toList());
         } finally {

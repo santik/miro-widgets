@@ -9,6 +9,7 @@ import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
 import org.miro.service.WidgetService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InvalidObjectException;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/widget")
 @RestController
@@ -31,6 +34,12 @@ import java.util.List;
 public class WidgetController {
 
     private final WidgetService widgetService;
+
+    @Value("${app.perPage.default}")
+    private int perPageDefault;
+
+    @Value("${app.perPage.max}")
+    private int perPageMax;
 
     @PostMapping
     @ApiOperation("Creates new widget")
@@ -84,7 +93,9 @@ public class WidgetController {
     @GetMapping("/all")
     @ApiOperation("Gets all widgets")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = List.class)})
-    public List<WidgetPresentation> getAll() {
-        return widgetService.findAllWidgets();
+    public List<WidgetPresentation> getAllPageable(@RequestParam(value = "page") Optional<Integer> pageOptional, @RequestParam(value = "perPage") Optional<Integer> perPageOptional) {
+        var page = Math.max(1, pageOptional.orElse(1));
+        var perPage = Math.min(perPageOptional.orElse(perPageDefault), perPageMax);
+        return widgetService.findAllWidgets(page, perPage);
     }
 }

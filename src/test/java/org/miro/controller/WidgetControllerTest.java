@@ -22,7 +22,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -168,10 +171,10 @@ public class WidgetControllerTest {
     }
 
     @Test
-    public void getAll_shouldReturnOk() throws WidgetNotFound {
+    public void getAll_shouldReturnOk() {
         //arrange
         List<WidgetPresentation> list = Collections.singletonList(new WidgetPresentation());
-        when(widgetService.findAllWidgets()).thenReturn(list);
+        when(widgetService.findAllWidgets(anyInt(), anyInt())).thenReturn(list);
 
         //act
         ResponseEntity<List> response = restTemplate.exchange(getEndpointPath() + "/all", HttpMethod.GET, null, List.class);
@@ -179,7 +182,15 @@ public class WidgetControllerTest {
         //assert
         assertEquals(OK, response.getStatusCode());
         assertEquals(list.size(), response.getBody().size());
+    }
 
+    @Test
+    public void getAll_withoutParams_shouldSetDefaults() {
+        //act
+        restTemplate.exchange(getEndpointPath() + "/all", HttpMethod.GET, null, List.class);
+
+        //assert
+        verify(widgetService).findAllWidgets(1, 10);
     }
 
     private String getEndpointPath() {

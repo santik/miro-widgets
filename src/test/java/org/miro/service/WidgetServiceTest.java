@@ -175,11 +175,11 @@ class WidgetServiceTest {
         var service = new WidgetService(repository, mapper);
         Widget widget = new Widget();
         List<Object> t = List.of(widget);
-        when(repository.findAll()).thenReturn(t);
+        when(repository.findAll(1, 10)).thenReturn(t);
         ArgumentCaptor<Widget> widgetArgumentCaptor = ArgumentCaptor.forClass(Widget.class);
 
         //act
-        service.findAllWidgets();
+        service.findAllWidgets(1, 10);
 
         //assert
         verify(mapper).getWidgetPresentation(widgetArgumentCaptor.capture());

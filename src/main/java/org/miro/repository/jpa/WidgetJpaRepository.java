@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.miro.model.Widget;
 import org.miro.repository.WidgetRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class WidgetJpaRepository implements WidgetRepository<Widget, String> {
     private final WidgetCrudRepository crudRepository;
 
     @Override
-    public List<Widget> findAll() {
-        return crudRepository.findAllByOrderByZ();
+    public List<Widget> findAll(int page, int perPage) {
+        return crudRepository.findAllByOrderByZ(PageRequest.of(page - 1, perPage));
     }
 
     @Override

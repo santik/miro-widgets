@@ -3,6 +3,8 @@ package org.miro.repository.jpa;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.miro.model.Widget;
+import org.mockito.ArgumentCaptor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,19 +27,24 @@ class WidgetJpaRepositoryTest {
         crudRepo = mock(WidgetCrudRepository.class);
         repository = new WidgetJpaRepository(crudRepo);
     }
-    
-    
+
     @Test
     void findAll_shouldReturnWidgetsFromCrudRepo() {
         //arrange
+        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
         List<Widget> expectedList = Collections.emptyList();
-        when(crudRepo.findAllByOrderByZ()).thenReturn(expectedList);
+        when(crudRepo.findAllByOrderByZ(any())).thenReturn(expectedList);
 
         //act
-        var widgets = repository.findAll();
+        int perPage = 100;
+        int page = 1;
+        var widgets = repository.findAll(page, perPage);
 
         //assert
         assertSame(expectedList, widgets);
+        verify(crudRepo).findAllByOrderByZ(pageableArgumentCaptor.capture());
+        assertEquals(pageableArgumentCaptor.getValue().getPageNumber(), page - 1);
+        assertEquals(pageableArgumentCaptor.getValue().getPageSize(), perPage);
     }
 
     @Test
