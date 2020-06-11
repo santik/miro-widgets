@@ -24,6 +24,7 @@
         <awaitility.version>3.0.0</awaitility.version>
         <google.api.version>0.14.0</google.api.version>
         <lombok.version>1.18.10</lombok.version>
+        <javafaker.version>1.0.1</javafaker.version>
     </properties>
 
     <dependencies>
@@ -74,6 +75,12 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafaker.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

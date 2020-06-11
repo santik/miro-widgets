@@ -50,7 +50,7 @@ public class WidgetController {
     @ResponseBody
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = WidgetPresentation.class)})
     public ResponseEntity<WidgetPresentation> update(@PathVariable("id") String id, @RequestBody WidgetCoordinates coordinates) {
-        WidgetPresentation updatedWidget = null;
+        WidgetPresentation updatedWidget;
         try {
             updatedWidget = widgetService.updateWidget(id, coordinates);
         } catch (WidgetNotFound widgetNotFound) {
@@ -72,6 +72,7 @@ public class WidgetController {
 
     @GetMapping("/{id}")
     @ApiOperation("Gets widget by id")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = WidgetPresentation.class)})
     public ResponseEntity<WidgetPresentation> findById(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(widgetService.findWidgetById(id));
@@ -81,8 +82,9 @@ public class WidgetController {
     }
 
     @GetMapping("/all")
+    @ApiOperation("Gets all widgets")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = List.class)})
     public List<WidgetPresentation> getAll() {
         return widgetService.findAllWidgets();
     }
-
 }
