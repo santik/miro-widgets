@@ -33,7 +33,7 @@ public class WidgetJpaRepository implements WidgetRepository<Widget, String> {
         } else {
             shiftUpFromZIndex(widget.getZ());
         }
-        return save(widget);
+        return crudRepository.save(widget);
     }
 
     @Override
@@ -49,15 +49,11 @@ public class WidgetJpaRepository implements WidgetRepository<Widget, String> {
         return optionalWidget.get().getZ() + 1;
     }
 
-    private Widget save(Widget widget) {
-        return crudRepository.save(widget);
-    }
-
     private void shiftUpFromZIndex(Integer zIndex) {
         crudRepository.findAllByZGreaterThanEqualOrderByZDesc(zIndex)
                 .forEach(widget1 -> {
                     widget1.setZ(widget1.getZ() + 1);
-                    save(widget1);
+                    crudRepository.save(widget1);
                 });
     }
 
