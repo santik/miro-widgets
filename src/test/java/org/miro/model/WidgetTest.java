@@ -30,12 +30,16 @@ class WidgetTest {
         var coordinates1 = new WidgetDescription(1,null,1,1,1);
         var coordinates2 = new WidgetDescription(1,1,1,0,1);
         var coordinates3 = new WidgetDescription(1,1,1,1,0);
+        var coordinates4 = new WidgetDescription(1,1,1,1,null);
+        var coordinates5 = new WidgetDescription(1,1,1,1,-1);
 
         //act && assert
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates));
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates1));
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates2));
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates3));
+        assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates4));
+        assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates5));
     }
 
     @Test
