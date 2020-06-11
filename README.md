@@ -27,7 +27,7 @@ To access API Swagger was set up.
 Url is http://localhost:8080/api/swagger-ui.html (when running the service)
 
 
-###Complications
+### Complications
 
 - configurable datastore - DONE
 - pagination - DONE
