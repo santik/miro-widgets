@@ -1,7 +1,7 @@
 package org.miro.service;
 
 import org.junit.jupiter.api.Test;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
 import org.miro.model.Widget;
@@ -26,7 +26,7 @@ class WidgetServiceTest {
         var mapper = mock(WidgetMapper.class);
         var repository = mock(WidgetRepository.class);
         var service = new WidgetService(repository, mapper);
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1,1,1,1,1);
         var widget = new Widget();
         when(repository.createOrUpdate(any())).thenReturn(widget);
         var widgetPresentation = new WidgetPresentation();
@@ -46,7 +46,7 @@ class WidgetServiceTest {
         var mapper = mock(WidgetMapper.class);
         var repository = mock(WidgetRepository.class);
         var service = new WidgetService(repository, mapper);
-        var coordinates = new WidgetCoordinates(null,1,1);
+        var coordinates = new WidgetDescription(null,1,1,1,1);
 
         //act && assert
         assertThrows(InvalidObjectException.class, () -> service.createWidget(coordinates));
@@ -58,7 +58,7 @@ class WidgetServiceTest {
         var mapper = mock(WidgetMapper.class);
         var repository = mock(WidgetRepository.class);
         var service = new WidgetService(repository, mapper);
-        var coordinates = new WidgetCoordinates(1,null,1);
+        var coordinates = new WidgetDescription(1,null,1,1,1);
 
         //act && assert
         assertThrows(InvalidObjectException.class, () -> service.createWidget(coordinates));
@@ -72,7 +72,7 @@ class WidgetServiceTest {
         var repository = mock(WidgetRepository.class);
         var service = new WidgetService(repository, mapper);
         var id = "someid";
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1,1,1,1,1);
         Widget widget = Widget.builder().id(id).x(2).y(2).z(2).build();
         when(repository.findById(id)).thenReturn(Optional.of(widget));
         ArgumentCaptor<Widget> widgetArgumentCaptor = ArgumentCaptor.forClass(Widget.class);
@@ -99,7 +99,7 @@ class WidgetServiceTest {
         var repository = mock(WidgetRepository.class);
         var service = new WidgetService(repository, mapper);
         var id = "someid";
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1,1,1,1,1);
         when(repository.findById(id)).thenReturn(Optional.empty());
 
         //act && assert

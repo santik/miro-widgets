@@ -1,7 +1,7 @@
 package org.miro.model;
 
 import org.junit.jupiter.api.Test;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 
 import java.io.InvalidObjectException;
 
@@ -12,7 +12,7 @@ class WidgetTest {
     @Test
     void from_withFullCoordinates_shouldReturnWidget() throws InvalidObjectException {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1,1,1,1,1);
 
         //act
         var widget = Widget.from(coordinates);
@@ -26,12 +26,16 @@ class WidgetTest {
     @Test
     void from_withIncompleteCoordinates_shouldThrowException() {
         //arrange
-        var coordinates = new WidgetCoordinates(null,1,1);
-        var coordinates1 = new WidgetCoordinates(1,null,1);
+        var coordinates = new WidgetDescription(null,1,1,1,1);
+        var coordinates1 = new WidgetDescription(1,null,1,1,1);
+        var coordinates2 = new WidgetDescription(1,1,1,0,1);
+        var coordinates3 = new WidgetDescription(1,1,1,1,0);
 
         //act && assert
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates));
         assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates1));
+        assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates2));
+        assertThrows(InvalidObjectException.class, () -> Widget.from(coordinates3));
     }
 
     @Test

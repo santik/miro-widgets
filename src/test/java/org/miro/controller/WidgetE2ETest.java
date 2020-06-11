@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +41,13 @@ public class WidgetE2ETest {
     @Test
     public void create_withCorrectCoordinates_shouldReturnCreated() {
         //arrange
-        var coordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var coordinates = new WidgetDescription(
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
 
         //act
         ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
@@ -57,7 +63,12 @@ public class WidgetE2ETest {
     @Test
     public void create_withInCorrectCoordinates_shouldReturnBadRequest() {
         //arrange
-        var coordinates = new WidgetCoordinates(null,faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var coordinates = new WidgetDescription(null,
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
 
         //act
         ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
@@ -69,10 +80,22 @@ public class WidgetE2ETest {
     @Test
     public void update_withExistingWidget_shouldReturnOk() {
         //arrange
-        var coordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var coordinates = new WidgetDescription(
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
         ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
 
-        var newCoordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var newCoordinates = new WidgetDescription(
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
         var coordinatesEntity = new HttpEntity<>(newCoordinates);
         var id = response.getBody().getId();
 
@@ -89,7 +112,7 @@ public class WidgetE2ETest {
     @Test
     public void update_withNotExistingWidget_shouldReturnNotFound() {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
         var coordinatesEntity = new HttpEntity<>(coordinates);
         var id = UUID.randomUUID().toString();
 
@@ -103,7 +126,13 @@ public class WidgetE2ETest {
     @Test
     public void delete_withExistingWidget_shouldReturnOk() {
         //arrange
-        var coordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var coordinates = new WidgetDescription(
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
         ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
         var id = response.getBody().getId();
 
@@ -131,7 +160,13 @@ public class WidgetE2ETest {
     @Test
     public void findById_withExistingWidget_shouldReturnOk() {
         //arrange
-        var coordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+        var coordinates = new WidgetDescription(
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100),
+                faker.number().numberBetween(1, 100)
+        );
         ResponseEntity<WidgetPresentation> response = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
         var id = response.getBody().getId();
 
@@ -165,10 +200,16 @@ public class WidgetE2ETest {
             restTemplate.delete(getEndpointPath() + "/" + widget.getId());
         });
 
-        Map<String, WidgetCoordinates> coordinatesMap = new HashMap<>();
+        Map<String, WidgetDescription> coordinatesMap = new HashMap<>();
         int endExclusive = 100;
         IntStream.range(0, endExclusive).forEach(i -> {
-            var coordinates = new WidgetCoordinates(faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100),faker.number().numberBetween(1, 100));
+            var coordinates = new WidgetDescription(
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 100),
+                    faker.number().numberBetween(1, 100)
+            );
             ResponseEntity<WidgetPresentation> responseEntity = restTemplate.postForEntity(getEndpointPath(), coordinates, WidgetPresentation.class);
             coordinatesMap.put(responseEntity.getBody().getId(), coordinates);
         });
@@ -180,10 +221,10 @@ public class WidgetE2ETest {
         assertEquals(OK, response.getStatusCode());
         assertEquals(coordinatesMap.size(), getAll.getBody().length);
         Stream.of(getAll.getBody()).forEach(item -> {
-            WidgetCoordinates widgetCoordinates = coordinatesMap.get(item.getId());
-            assertEquals(item.getXindex(), widgetCoordinates.getXindex());
-            assertEquals(item.getYindex(), widgetCoordinates.getYindex());
-            assertTrue(item.getZindex() >= widgetCoordinates.getZindex());
+            WidgetDescription widgetDescription = coordinatesMap.get(item.getId());
+            assertEquals(item.getXindex(), widgetDescription.getXindex());
+            assertEquals(item.getYindex(), widgetDescription.getYindex());
+            assertTrue(item.getZindex() >= widgetDescription.getZindex());
         });
     }
 

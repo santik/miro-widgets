@@ -25,3 +25,10 @@ then `java -jar target/miro-widgets-1.0-SNAPSHOT.jar`
 
 To access API Swagger was set up.  
 Url is http://localhost:8080/api/swagger-ui.html (when running the service)
+
+
+###Complications
+
+- configurable datastore - done
+- rate limiting probably can be done with https://github.com/MarcGiffing/bucket4j-spring-boot-starter
+- pagination. Slice a storage inside inmemory repository and use `Pageable` in JPA

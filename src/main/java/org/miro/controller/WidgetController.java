@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
 import org.miro.service.WidgetService;
@@ -36,7 +36,7 @@ public class WidgetController {
     @ApiOperation("Creates new widget")
     @ResponseBody
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Success", response = WidgetPresentation.class)})
-    public ResponseEntity<WidgetPresentation> create(@RequestBody WidgetCoordinates coordinates) {
+    public ResponseEntity<WidgetPresentation> create(@RequestBody WidgetDescription coordinates) {
         try {
             var widget = widgetService.createWidget(coordinates);
             return new ResponseEntity<>(widget, HttpStatus.CREATED);
@@ -49,7 +49,7 @@ public class WidgetController {
     @ApiOperation("Updates widget by id")
     @ResponseBody
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success", response = WidgetPresentation.class)})
-    public ResponseEntity<WidgetPresentation> update(@PathVariable("id") String id, @RequestBody WidgetCoordinates coordinates) {
+    public ResponseEntity<WidgetPresentation> update(@PathVariable("id") String id, @RequestBody WidgetDescription coordinates) {
         WidgetPresentation updatedWidget;
         try {
             updatedWidget = widgetService.updateWidget(id, coordinates);

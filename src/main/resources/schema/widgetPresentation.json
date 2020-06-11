@@ -11,7 +11,9 @@
             "lastModifiedDate": 0,
             "xindex": 1,
             "yindex": 0,
-            "zindex": 1
+            "zindex": 1,
+            "width": 1,
+            "height": 1
         }
     ],
     "required": [
@@ -19,7 +21,9 @@
         "lastModifiedDate",
         "xindex",
         "yindex",
-        "zindex"
+        "zindex",
+        "width",
+        "height"
     ],
     "additionalProperties": true,
     "properties": {
@@ -68,6 +72,22 @@
             "type": "integer",
             "title": "The zindex schema",
             "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "width": {
+            "$id": "#/properties/width",
+            "type": "integer",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "height": {
+            "$id": "#/properties/height",
+            "type": "integer",
             "default": 0,
             "examples": [
                 1

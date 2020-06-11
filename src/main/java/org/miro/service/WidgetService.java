@@ -2,7 +2,7 @@ package org.miro.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
 import org.miro.model.Widget;
@@ -24,15 +24,15 @@ public class WidgetService {
     private final WidgetMapper mapper;
 
     @Transactional
-    public WidgetPresentation createWidget(WidgetCoordinates widgetCoordinates) throws InvalidObjectException {
-        var widget = Widget.from(widgetCoordinates);
+    public WidgetPresentation createWidget(WidgetDescription widgetDescription) throws InvalidObjectException {
+        var widget = Widget.from(widgetDescription);
         return mapper.getWidgetPresentation(
                 repository.createOrUpdate(widget)
         );
     }
 
     @Transactional
-    public WidgetPresentation updateWidget(String id, WidgetCoordinates coordinates) throws WidgetNotFound {
+    public WidgetPresentation updateWidget(String id, WidgetDescription coordinates) throws WidgetNotFound {
         var widget = getWidgetToUpdate(id, coordinates);
         return mapper.getWidgetPresentation(
                 repository.createOrUpdate(widget)
@@ -66,7 +66,7 @@ public class WidgetService {
                 .collect(Collectors.toList());
     }
 
-    private Widget getWidgetToUpdate(String id, WidgetCoordinates coordinates) throws WidgetNotFound {
+    private Widget getWidgetToUpdate(String id, WidgetDescription coordinates) throws WidgetNotFound {
 
         var widgetOptional = repository.findById(id);
         if (widgetOptional.isEmpty()) {

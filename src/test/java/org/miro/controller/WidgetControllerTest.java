@@ -3,7 +3,7 @@ package org.miro.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.miro.api.WidgetCoordinates;
+import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
 import org.miro.service.WidgetService;
@@ -42,7 +42,7 @@ public class WidgetControllerTest {
     @Test
     public void create_withCorrectCoordinates_shouldReturnCreated() throws InvalidObjectException {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
         var expectedPresentation = new WidgetPresentation();
         when(widgetService.createWidget(coordinates)).thenReturn(expectedPresentation);
 
@@ -58,7 +58,7 @@ public class WidgetControllerTest {
     @Test
     public void create_withInCorrectCoordinates_shouldReturnBadRequest() throws InvalidObjectException {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
         when(widgetService.createWidget(coordinates)).thenThrow(InvalidObjectException.class);
 
         //act
@@ -71,7 +71,7 @@ public class WidgetControllerTest {
     @Test
     public void update_withExistingWidget_shouldReturnOk() throws WidgetNotFound {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
         var expectedPresentation = new WidgetPresentation();
         var coordinatesEntity = new HttpEntity<>(coordinates);
         var id = "someid";
@@ -88,7 +88,7 @@ public class WidgetControllerTest {
     @Test
     public void update_withNotExistingWidget_shouldReturnNotFound() throws WidgetNotFound {
         //arrange
-        var coordinates = new WidgetCoordinates(1,1,1);
+        var coordinates = new WidgetDescription(1, 1, 1, 1, 1);
         var coordinatesEntity = new HttpEntity<>(coordinates);
         var id = "someid";
         when(widgetService.updateWidget(id, coordinates)).thenThrow(WidgetNotFound.class);

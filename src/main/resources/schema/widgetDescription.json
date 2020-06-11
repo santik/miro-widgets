@@ -8,13 +8,17 @@
     {
       "xindex": 0,
       "yindex": 0,
-      "zindex": 0
+      "zindex": 0,
+      "width": 0,
+      "height": 0
     }
   ],
   "required": [
     "xindex",
     "yindex",
-    "zindex"
+    "zindex",
+    "width",
+    "height"
   ],
   "additionalProperties": true,
   "properties": {
@@ -39,6 +43,20 @@
       "type": "integer",
       "title": "The zindex schema",
       "description": "An explanation about the purpose of this instance.",
+      "examples": [
+        0
+      ]
+    },
+    "width": {
+      "$id": "#/properties/width",
+      "type": "integer",
+      "examples": [
+        0
+      ]
+    },
+    "height": {
+      "$id": "#/properties/height",
+      "type": "integer",
       "examples": [
         0
       ]
