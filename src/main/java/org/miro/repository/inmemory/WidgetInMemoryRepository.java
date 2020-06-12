@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +141,6 @@ public class WidgetInMemoryRepository implements WidgetRepository<Widget, String
                 .map(zKeyIndex::get)
                 .map(mainStorage::get)
                 .collect(Collectors.toList());
-
     }
 
     private Optional<Widget> findTop() {

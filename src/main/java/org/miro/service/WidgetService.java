@@ -60,12 +60,6 @@ public class WidgetService {
         );
     }
 
-//    public List<WidgetPresentation> findAllWidgets() {
-//        return repository.findAll().stream()
-//                .map(mapper::getWidgetPresentation)
-//                .collect(Collectors.toList());
-//    }
-
     public List<WidgetPresentation> findAllWidgets(int page, int perPage) {
         return repository.findAll(page, perPage).stream()
                 .map(mapper::getWidgetPresentation)
