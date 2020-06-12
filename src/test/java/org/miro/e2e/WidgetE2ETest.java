@@ -1,4 +1,4 @@
-package org.miro.controller;
+package org.miro.e2e;
 
 import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
+import org.miro.controller.WidgetController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
