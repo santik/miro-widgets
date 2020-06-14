@@ -123,7 +123,7 @@ public class WidgetInMemoryRepository implements WidgetRepository<Widget, String
         findAllAboveZIndex(zIndex).forEach(widget -> {
                     Integer z = widget.getZ();
                     zKeyIndex.remove(z);
-                    widget.setZ(z + 1);
+                    widget.setZ(z + Z_SHIFT_VALUE);
                     save(widget);
                 });
     }
