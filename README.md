@@ -32,3 +32,6 @@ Url is http://localhost:8080/api/swagger-ui.html (when running the service)
 - configurable datastore - DONE
 - pagination - DONE
 - rate limiting probably can be done with https://github.com/MarcGiffing/bucket4j-spring-boot-starter
+- filtering: 
+  - check every widget if it fits. Complexity will be O(n), but we need less
+  - create 4 additional indexes (the same as zindex) which will contain left, right, top and bottom widget borders. Take from each index values `<=` corresponding area border. Return widgets which present in all 4 results.  
