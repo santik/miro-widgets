@@ -23,6 +23,11 @@ public class WidgetJpaRepository implements WidgetRepository<Widget, String> {
     }
 
     @Override
+    public List<Widget> findAll() {
+        return crudRepository.findAll();
+    }
+
+    @Override
     public Optional<Widget> findById(String id) {
         return crudRepository.findById(id);
     }

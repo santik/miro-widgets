@@ -57,6 +57,18 @@ public class WidgetInMemoryRepository implements WidgetRepository<Widget, String
     }
 
     @Override
+    public List<Widget> findAll() {
+        readLock.lock();
+        try {
+            return zKeyIndex.values().stream()
+                    .map(mainStorage::get)
+                    .collect(Collectors.toList());
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    @Override
     public Optional<Widget> findById(String id) {
         readLock.lock();
         try {

@@ -1,6 +1,9 @@
 package org.miro.service;
 
 import org.junit.jupiter.api.Test;
+import org.miro.api.Area;
+import org.miro.api.LowerLeft;
+import org.miro.api.UpperRight;
 import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
@@ -9,12 +12,14 @@ import org.miro.repository.WidgetRepository;
 import org.mockito.ArgumentCaptor;
 
 import java.io.InvalidObjectException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -184,5 +189,71 @@ class WidgetServiceTest {
         //assert
         verify(mapper).getWidgetPresentation(widgetArgumentCaptor.capture());
         assertEquals(widget, widgetArgumentCaptor.getValue());
+    }
+
+    @Test
+    void findAllWidgetsInArea_shouldFilterCorrectly() {
+        //arrange
+        var mapper = mock(WidgetMapper.class);
+        var repository = mock(WidgetRepository.class);
+        var service = new WidgetService(repository, mapper);
+        Area area = new Area()
+                .withLowerLeft(new LowerLeft().withX(-50).withY(-50))
+                .withUpperRight(new UpperRight().withX(100).withY(150));
+        List<Widget> list = new ArrayList<>();
+        Widget widget1 = Widget.builder().x(50).y(50).height(100).width(100).build();
+        list.add(widget1);
+        Widget widget2 = Widget.builder().x(50).y(100).height(100).width(100).build();
+        list.add(widget2);
+        Widget widget3 = Widget.builder().x(100).y(100).height(100).width(100).build();
+        list.add(widget3);
+        Widget widget4 = Widget.builder().x(0).y(0).height(100).width(100).build();
+        list.add(widget4);
+        when(repository.findAll()).thenReturn(list);
+        ArgumentCaptor<Widget> widgetArgumentCaptor = ArgumentCaptor.forClass(Widget.class);
+
+        //act
+        List<WidgetPresentation> allWidgetsInArea = service.findAllWidgetsInArea(area, 1, 500);
+
+        //assert
+        verify(mapper, times(3)).getWidgetPresentation(widgetArgumentCaptor.capture());
+        assertEquals(3, allWidgetsInArea.size());
+        List<Widget> allValues = widgetArgumentCaptor.getAllValues();
+        assertSame(widget1, allValues.get(0));
+        assertSame(widget2, allValues.get(1));
+        assertSame(widget4, allValues.get(2));
+    }
+
+    @Test
+    void findAllWidgetsInArea_shouldPaginateCorrectly() {
+        //arrange
+        var mapper = mock(WidgetMapper.class);
+        var repository = mock(WidgetRepository.class);
+        var service = new WidgetService(repository, mapper);
+        Area area = new Area()
+                .withLowerLeft(new LowerLeft().withX(-50).withY(-50))
+                .withUpperRight(new UpperRight().withX(100).withY(150));
+        List<Widget> list = new ArrayList<>();
+        Widget widget1 = Widget.builder().x(50).y(50).height(100).width(100).build();
+        list.add(widget1);
+        Widget widget2 = Widget.builder().x(50).y(100).height(100).width(100).build();
+        list.add(widget2);
+        Widget widget3 = Widget.builder().x(100).y(100).height(100).width(100).build();
+        list.add(widget3);
+        Widget widget4 = Widget.builder().x(0).y(0).height(100).width(100).build();
+        list.add(widget4);
+        when(repository.findAll()).thenReturn(list);
+
+        //act
+        List<WidgetPresentation> allWidgetsInAreaPage1 = service.findAllWidgetsInArea(area, 1, 1);
+        List<WidgetPresentation> allWidgetsInAreaPage2 = service.findAllWidgetsInArea(area, 2, 1);
+        List<WidgetPresentation> allWidgetsInAreaPage3 = service.findAllWidgetsInArea(area, 3, 1);
+        List<WidgetPresentation> allWidgetsInAreaPage4 = service.findAllWidgetsInArea(area, 4, 1);
+
+        //assert
+        assertFalse(allWidgetsInAreaPage1.isEmpty());
+        assertFalse(allWidgetsInAreaPage2.isEmpty());
+        assertFalse(allWidgetsInAreaPage3.isEmpty());
+        assertTrue(allWidgetsInAreaPage4.isEmpty());
     }
 }

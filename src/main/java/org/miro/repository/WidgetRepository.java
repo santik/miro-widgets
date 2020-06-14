@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface WidgetRepository<T extends Widget, I extends String> {
     List<Widget> findAll(int page, int perPage);
+    List<Widget> findAll();
     Optional<T> findById(I id);
     T createOrUpdate(T widget);
     void deleteById(I id);

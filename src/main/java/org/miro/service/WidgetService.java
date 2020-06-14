@@ -2,6 +2,7 @@ package org.miro.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.miro.api.Area;
 import org.miro.api.WidgetDescription;
 import org.miro.api.WidgetPresentation;
 import org.miro.exception.WidgetNotFound;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.InvalidObjectException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +66,36 @@ public class WidgetService {
         return repository.findAll(page, perPage).stream()
                 .map(mapper::getWidgetPresentation)
                 .collect(Collectors.toList());
+    }
+
+    public List<WidgetPresentation> findAllWidgetsInArea(Area area, int page, int perPage) {
+        var startIndex = (page - 1) * perPage;
+
+        return repository.findAll().stream()
+                .filter(widget -> fitsInArea(area, widget))
+                .skip(startIndex)
+                .limit(perPage)
+                .map(mapper::getWidgetPresentation)
+                .collect(Collectors.toList());
+    }
+
+    private boolean fitsInArea(Area area, Widget widget) {
+        int x = widget.getX();
+        int y = widget.getY();
+
+        int width = widget.getWidth();
+        int height = widget.getHeight();
+
+        int leftBorder = area.getLowerLeft().getX();
+        int rightBorder = area.getUpperRight().getX();
+        int topBorder = area.getUpperRight().getY();
+        int bottomBorder = area.getLowerLeft().getY();
+
+        boolean fitsLeft = leftBorder <= x - width / 2;
+        boolean fitsRight = rightBorder >= x + width / 2;
+        boolean fitsTop = topBorder >= y + height / 2;
+        boolean fitsBottom = bottomBorder <= y - height / 2;
+        return fitsLeft && fitsRight && fitsTop && fitsBottom;
     }
 
     private Widget getWidgetToUpdate(String id, WidgetDescription description ) throws WidgetNotFound {
